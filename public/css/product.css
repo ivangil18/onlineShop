@@ -1,0 +1,108 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat';
+}
+
+main {
+  height: 100vh;
+  width: 100%;
+  padding: 1rem;
+}
+
+.main-header {
+  width: 100%;
+  height: 3.5rem;
+  background-color: rgb(14, 14, 99);
+  padding: 0 1.5rem;
+}
+
+.main-header_nav {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.main-header_item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.main-header_item {
+  margin: 0 1.5rem;
+  padding: 0;
+}
+
+.main-header_item a {
+  text-decoration: none;
+  color: white;
+}
+
+.main-header_item a:hover,
+.main-header_item a:active,
+.main-header_item a.active {
+  color: rgb(104, 152, 224);
+}
+
+.product-form {
+  width: 20rem;
+  max-width: 90%;
+  /* margin: auto; */
+}
+
+.form-control label,
+.form-control input {
+  display: block;
+  width: 100%;
+}
+
+.form-control input {
+  border: 1px solid rgb(14, 14, 99);
+  border-radius: 4px;
+  margin: 0.3rem 0 1rem;
+}
+
+.form-control label {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+button {
+  font: inherit;
+  border: 1px solid rgb(14, 14, 99);
+  cursor: pointer;
+  border-radius: 4px;
+  background: rgb(18, 85, 211);
+  padding: .6rem;
+  color: white;
+  font-size: .8em;
+}
+
+button:active,
+button:hover {
+  background-color: rgb(56, 116, 207);
+}
+
+.product-item {
+  width: 20rem;
+  max-width: 95%;
+}
+
+.product__title {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: .3rem 0 1.2rem;
+}
+
+.product__price {
+  text-align: center;
+  color: #4d4d4d;
+  margin-bottom: 0.5rem;
+}
+
+.product__description {
+  text-align: center;
+}
