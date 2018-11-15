@@ -26,3 +26,11 @@ exports.productsData = (req, res, next) => {
     });
   });
 };
+
+exports.getEditProduct = (req, res, next) => {
+  res.render('admin/edit-product', { pageTitle: 'Edit Product' });
+};
+
+exports.getProducts = (req, res, next) => {
+  res.render('admin/products', { pageTitle: 'Products' });
+};
