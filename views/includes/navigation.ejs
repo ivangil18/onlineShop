@@ -2,7 +2,31 @@
   <nav class="main-header_nav">
     <ul class="main-header_item-list">
       <li class="main-header_item">
-        <a class="<%= path === '/' ? 'active' : ' ' %>" href="/">Shop</a>
+        <a class="<%= path === '/' ? 'active' : ' ' %>" href="/index">Shop</a>
+      </li>
+      <li class="main-header_item">
+        <a
+          class="<%= path === '/products-list' ? 'active' : ' ' %>"
+          href="/products-list"
+          >Products</a
+        >
+      </li>
+      <li class="main-header_item">
+        <a class="<%= path === '/cart' ? 'active' : ' ' %>" href="/cart"
+          >Cart</a
+        >
+      </li>
+      <li class="main-header_item">
+        <a class="<%= path === '/orders' ? 'active' : ' ' %>" href="/orders"
+          >Orders</a
+        >
+      </li>
+      <li class="main-header_item">
+        <a
+          class="<%= path === '/add-product' ? 'active' : '' %>"
+          href="/admin/add-product"
+          >Add Product</a
+        >
       </li>
       <li class="main-header_item">
         <a class="<%= path === '/checkout' ? 'active' : '' %>" href="/checkout"
@@ -11,14 +35,9 @@
       </li>
       <li class="main-header_item">
         <a
-          class="<%= path === '/add-product' ? 'active' : ''%>"
-          href="/admin/add-product"
+          class="<%= path === '/products' ? 'active' : ''%>"
+          href="/admin/products"
           >Product Admin</a
-        >
-      </li>
-      <li class="main-header_item">
-        <a class="<%= path === '/cart' ? 'active' : ' ' %>" href="/cart"
-          >Cart</a
         >
       </li>
     </ul>

@@ -15,13 +15,15 @@
               <img src="<%= product.imageURL %>"/>
             </div>
             <div class="card__content">
-              <h2 class="product__price"><%= product.price %></h2>
+              <h2 class="product__price">$<%= product.price %></h2>
               <p class="product__decription">
                 <%= product.description %>
               </p>
             </div>
             <div class="card__actions">
-              <button type="submit">Add Cart</button>
+              <form action="/add-to-cart" method="POST">
+                <button class="btn" type="submit">Add Cart</button>
+              </form>
             </div>
           </header>
         </article>

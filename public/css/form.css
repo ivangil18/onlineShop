@@ -22,8 +22,12 @@
     font-weight: bold;
     font-size: 1rem;
   }
+
+  a {
+    text-decoration: none;
+  }
   
-  button {
+  .btn {
     font: inherit;
     border: 1px solid rgb(14, 14, 99);
     cursor: pointer;
