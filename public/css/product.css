@@ -47,44 +47,7 @@ main {
   color: rgb(104, 152, 224);
 }
 
-.product-form {
-  width: 20rem;
-  max-width: 90%;
-  /* margin: auto; */
-}
 
-.form-control label,
-.form-control input {
-  display: block;
-  width: 100%;
-}
-
-.form-control input {
-  border: 1px solid rgb(14, 14, 99);
-  border-radius: 4px;
-  margin: 0.3rem 0 1rem;
-}
-
-.form-control label {
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-button {
-  font: inherit;
-  border: 1px solid rgb(14, 14, 99);
-  cursor: pointer;
-  border-radius: 4px;
-  background: rgb(18, 85, 211);
-  padding: .6rem;
-  color: white;
-  font-size: .8em;
-}
-
-button:active,
-button:hover {
-  background-color: rgb(56, 116, 207);
-}
 
 .product-item {
   width: 20rem;
