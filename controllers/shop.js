@@ -7,10 +7,24 @@ exports.productsData = (req, res, next) => {
     res.render('shop/products-list', {
       prods: products,
       pageTitle: 'Shop',
-      path: '/',
-      activeShop: true
+      path: '/products-list'
     });
   });
+};
+
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  Product.findProduct(prodId, product => {
+    res.render('shop/product-details', {
+      prod: product,
+      path: '/prod-details',
+      pageTitle: 'Details'
+    });
+  });
+};
+
+exports.getLanding = (req, res, next) => {
+  res.redirect('/index');
 };
 
 exports.getCart = (req, res, next) => {
@@ -21,11 +35,16 @@ exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', { pageTitle: 'Checkout', path: '/checkout' });
 };
 
-exports.getIndex = (req, res, next) =>{
-  res.render('shop/index', {pageTitle: 'Home', path: '/index'})
-}
+exports.getIndex = (req, res, next) => {
+  Product.fetchAll(products => {
+    res.render('shop/index', {
+      prods: products,
+      pageTitle: 'Shop',
+      path: '/index'
+    });
+  });
+};
 
-exports.getOrders = (req, res, next)=>{
-res.render('shop/orders', {pageTitle: 'Your Orders', path: '/orders'})
-}
-
+exports.getOrders = (req, res, next) => {
+  res.render('shop/orders', { pageTitle: 'Your Orders', path: '/orders' });
+};
