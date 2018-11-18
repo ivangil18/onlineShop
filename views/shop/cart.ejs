@@ -3,31 +3,7 @@
 <body>
 <%- include('../includes/navigation.ejs')%>
 <main>
-    <% if(prods.length > 0) {%>
-<div class="grid">
-    <% for(let product of prods) {%>
-      <article class="card product-item">
-        <header class="card__header">
-          <h1 class="product__title"><%= product.title %></h1>
-        <div class="card__image">
-         <img src="<%= product.imageURL %>"/>
-        </div>
-        <div class="card__content">
-          <h2 class="product__price">$<%= product.price %></h2>
-        </div>
-        <div class="card__actions">
-          <form action="/checkout" method="POST">
-           <input type="hidden" name="productId" value="<%= product.id%>">
-           <button class="btn" type="submit">Chekout</button>
-          </form>>
-         </div>
-        </header>
-       </article>
-     <%}%>   
-</div>
-     <%} else {%>
-        <h1>Cart Empty!</h1>
-      <%}%>   
+  
 </main>
 
 <%- include('../includes/end.ejs')%>
