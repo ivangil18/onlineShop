@@ -33,6 +33,17 @@ module.exports = class Product {
     });
   }
 
+  update(id) {
+    this.id = id;
+    getProductsFromFile(products => {
+      const productIndex = products.findIndex(prod => (prod.id = id));
+      products[productIndex] = this;
+      fs.writeFile(p, JSON.stringify(products), err => {
+        console.log(err);
+      });
+    });
+  }
+
   static fetchAll(cb) {
     getProductsFromFile(cb);
   }
