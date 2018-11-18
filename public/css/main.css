@@ -51,6 +51,12 @@ form {
     color: white;
 }
 
+.imgDetail{
+  width: 300px;
+  height:290px;
+}
+
+
 .main-header_item a:hover, 
 .main-header_item a:active, 
 .main-header_item a.active {
