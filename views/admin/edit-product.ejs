@@ -5,7 +5,7 @@
   <%- include('../includes/navigation.ejs') %>
 
     <main>
-      <form action="/admin/<% if(editMode) {%>edit-product/<%= product.id%><%}else{%>add-product<%}%>" method="POST" class="product-form">
+      <form action="/admin/<% if(editMode) {%>edit-product<%}else{%>add-product<%}%>" method="POST" class="product-form">
         <div class="form-control">
           <label for="title">Product:</label>
           <input type="text" name="title" id="title" value="<% if(editMode) {%><%= product.title%> <%}%>" />
@@ -22,6 +22,9 @@
           <label for="description">Product:</label>
           <textarea name="description" id="description" rows="5"><% if(editMode) { %><%= product.description%><%}%></textarea>
         </div>
+        <%if(editMode) {%>
+          <input type="hidden" name="productId" value="<%= product.id %>">
+        <%}%>
         <button class="btn" type="submit"><%if (editMode) { %>Update Product<%}else{%>Add Product<%}%></button>
         </form>
     </main>
