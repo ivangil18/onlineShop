@@ -56,3 +56,9 @@ exports.getProducts = (req, res, next) => {
     });
   });
 };
+
+exports.getDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.deleteProduct(prodId);
+  res.redirect('/admin/products');
+};

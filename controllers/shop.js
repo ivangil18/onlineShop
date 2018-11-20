@@ -29,7 +29,10 @@ exports.getLanding = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', { pageTitle: 'Cart', path: '/cart' });
+  Cart.fetchCart(cart => {
+    console.log(cart);    
+    res.render('shop/cart', { pageTitle: 'Cart', path: '/cart', cart: cart });
+  });
 };
 
 exports.postCart = (req, res, next) => {
@@ -39,6 +42,12 @@ exports.postCart = (req, res, next) => {
   });
   res.redirect('/');
 };
+
+exports.postCartRemove = (req, res, next) => {
+  const prodId = req.body.productId;
+  Cart.deleteProduct(prodId, 10.99, false);
+  res.redirect('/cart');
+}
 
 exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', { pageTitle: 'Checkout', path: '/checkout' });
