@@ -4,14 +4,24 @@ const router = express.Router();
 
 const shopController = require('../controllers/shop')
 
-router.get('/index', shopController.productsData);
+router.get('/', shopController.getLanding);
+
+router.get('/index', shopController.getIndex);
 
 router.get('/checkout', shopController.getCheckout);
 
 router.get('/cart', shopController.getCart);
 
+router.post('/cart-remove', shopController.postCartRemove)
+
+router.post('/cart', shopController.postCart);
+
 router.get('/orders', shopController.getOrders);
 
 router.get('/products-list', shopController.productsData)
+
+router.get('/product/:productId', shopController.getProduct)
+
+
 
 module.exports = router;
