@@ -1,5 +1,3 @@
-const products = [];
-
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
@@ -12,12 +10,18 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imgURL = req.body.imageURL;
-  const description = req.body.description;
   const price = req.body.price;
-  const product = new Product(null, title, imgURL, description, price);
-  product.save();
-  res.redirect('/');
+  const description = req.body.description;
+  const imageURL = req.body.imageURL;
+
+  const product = new Product(title, price, description, imageURL);
+  product
+    .save()
+    .then(result => {
+      console.log(result);
+      res.redirect('/');
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -26,39 +30,56 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const prodId = req.params.productId;
-  Product.findProduct(prodId, product => {
-    res.render('admin/edit-product', {
-      product: product,
-      pageTitle: 'Edit Product',
-      path: '/edit-product',
-      editMode: editProduct
-    });
-  });
+  Product.findById(prodId)
+    .then(product => {
+      res.render('admin/edit-product', {
+        product: product,
+        pageTitle: 'Edit Product',
+        path: '/edit-product',
+        editMode: editProduct
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postEditProduct = (req, res, next) => {
-  const id = req.body.productId;
   const title = req.body.title;
-  const imgURL = req.body.imageURL;
-  const description = req.body.description;
   const price = req.body.price;
-  const product = new Product(id, title, imgURL, description, price);
-  product.save();
-  res.redirect('/admin/products');
+  const description = req.body.description;
+  const imageURL = req.body.imageURL;
+  const idProd = req.body.productId;
+
+  const product = new Product(title, price, description, imageURL, idProd);
+
+  product
+    .save()
+    .then(() => {
+      console.log('Updated Product');
+      res.redirect('/admin/products');
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('admin/products', {
-      prods: products,
-      pageTitle: 'Admin Products',
-      path: '/products'
-    });
-  });
+  Product.fetchAll()
+    .then(products => {
+      res.render('admin/products', {
+        prods: products,
+        pageTitle: 'Admin Products',
+        path: '/products'
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteProduct(prodId);
-  res.redirect('/admin/products');
+  Product.deleteProduct(prodId)
+    .then(result => {
+      console.log('Product Deleted');
+      res.redirect('/admin/products');
+    })
+    .catch(err => console.log(err));
 };
