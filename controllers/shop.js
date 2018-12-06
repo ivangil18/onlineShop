@@ -1,6 +1,7 @@
 const products = [];
 
 const Product = require('../models/product');
+const User = require('../models/user');
 const Cart = require('../models/cart');
 
 exports.productsData = (req, res, next) => {
@@ -34,24 +35,43 @@ exports.getLanding = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.fetchCart(cart => {
-    console.log(cart);
-    res.render('shop/cart', { pageTitle: 'Cart', path: '/cart', cart: cart });
-  });
+  req.user
+    .fetchCart()
+    .then(products => {
+      console.log('entra aqui pero nada');
+      console.log(products);
+      res.render('shop/cart', {
+        pageTitle: 'Cart',
+        path: '/cart',
+        cart: products
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findProduct(prodId, product => {
-    Cart.addProduct(prodId, product.price);
-  });
-  res.redirect('/');
+
+  Product.findById(prodId)
+    .then(product => {
+      return req.user.addToCart(product);
+    })
+    .then(result => {
+      console.log('Product Added!');
+      res.redirect('/cart');
+    })
+    .catch(err => console.log(err));
 };
 
-exports.postCartRemove = (req, res, next) => {
+exports.postRemoveProductFromCart = (req, res, next) => {
   const prodId = req.body.productId;
-  Cart.deleteProduct(prodId, 10.99, false);
-  res.redirect('/cart');
+  req.user
+    .deleteItemFromCart(prodId)
+    .then(result => {
+      console.log('Product Remove from Cart');
+      res.redirect('/cart');      
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getCheckout = (req, res, next) => {
