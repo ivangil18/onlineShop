@@ -2,5 +2,25 @@
 </head>
 <body>
 <%- include('../includes/navigation.ejs')%>
-    <h1>No Orders yet!</h1>
+
+    <main>
+        <% if (orders.length <= 0) {%>
+        <h1>No Orders yet!</h1>
+        <% } else { %>
+        <ul>
+            <% orders.forEach( order => {%>
+                <li>
+                    <h5>
+                        Order #: <%= order._id %>
+                    </h5>
+                    <ul>
+                        <% order.items.forEach(item => {%>
+                    <li><h2><%= item.title%> (<%= item.quantity%>)</h2></li>        
+                        <%})%>
+                    </ul>
+                </li>
+                <%})%>
+        </ul>
+        <%  } %>
+    </main>
 <%- include('../includes/end.ejs')%>
