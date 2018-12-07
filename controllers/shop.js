@@ -69,7 +69,7 @@ exports.postRemoveProductFromCart = (req, res, next) => {
     .deleteItemFromCart(prodId)
     .then(result => {
       console.log('Product Remove from Cart');
-      res.redirect('/cart');      
+      res.redirect('/cart');
     })
     .catch(err => console.log(err));
 };
@@ -90,6 +90,24 @@ exports.getIndex = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+exports.getAddOrder = (req, res, next) => {
+  req.user
+    .addOrder()
+    .then(result => {
+      res.render('shop/orders', { pageTitle: 'Your Orders', path: '/orders' });
+    })
+    .catch(err => console.log(err));
+};
+
 exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', { pageTitle: 'Your Orders', path: '/orders' });
+  req.user
+    .getOrder()
+    .then(orders => {
+      res.render('shop/orders', {
+        pageTitle: 'Your Orders',
+        path: '/orders',
+        orders: orders
+      });
+    })
+    .catch(err => console.log(err));
 };

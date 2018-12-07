@@ -16,6 +16,8 @@ router.post('/cart-remove', shopController.postRemoveProductFromCart)
 
 router.post('/cart', shopController.postCart);
 
+router.get('/add-order', shopController.getAddOrder);
+
 router.get('/orders', shopController.getOrders);
 
 router.get('/products-list', shopController.productsData)
