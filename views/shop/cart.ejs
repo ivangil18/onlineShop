@@ -4,12 +4,12 @@
 <%- include('../includes/navigation.ejs')%>
 <main>
  <% if(cart.length > 0){%>
- <% for(let product of cart) {%>
-     <h1><%= product.title%> (<%= product.quantity%>)</h1>
+ <% for(let item of cart) {%>
+     <h1><%= item.productId.title%> (<%= item.quantity%>)</h1>
      <hr>
-     <h3>$<%= product.price%> (each)</h3>
+     <h3>$<%= item.productId.price%> (each)</h3>
      <form action="/cart-remove" method="POST">
-     <input type="hidden" name="productId" value="<%= product._id%>">
+     <input type="hidden" name="productId" value="<%= item.productId._id%>">
      <button type="submit" class="btn">Remove</button>
      </form>
   <%}%>
