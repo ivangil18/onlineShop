@@ -1,11 +1,7 @@
-const products = [];
-
 const Product = require('../models/product');
-const User = require('../models/user');
-const Cart = require('../models/cart');
 
 exports.productsData = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render('shop/products-list', {
         prods: products,
@@ -36,10 +32,10 @@ exports.getLanding = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .fetchCart()
-    .then(products => {
-      console.log('entra aqui pero nada');
-      console.log(products);
+    .populate('cart.items.productId')
+    .execPopulate()
+    .then(userCart => {
+      const products = userCart.cart.items;
       res.render('shop/cart', {
         pageTitle: 'Cart',
         path: '/cart',
@@ -79,7 +75,7 @@ exports.getCheckout = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then(products => {
       res.render('shop/index', {
         prods: products,
