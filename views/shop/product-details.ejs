@@ -14,7 +14,9 @@
         </div>
         <form action="/cart" method="POST">
         <input type="hidden" value="<%= product.id%>" name="productId">
-        <button type="submit" class="btn">Add Cart</button>
-        </form>
+        <% if (isAuthenticated) {%>
+            <button type="submit" class="btn">Add to Cart</button>
+        <% } %>    
+    </form>
     </main>
 <%- include('../includes/end.ejs')%>

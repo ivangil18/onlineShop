@@ -11,6 +11,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   cart: {
     items: [
       {
@@ -61,5 +65,3 @@ userSchema.methods.clearCart = function() {
 };
 
 module.exports = mongoose.model('User', userSchema);
-
-
