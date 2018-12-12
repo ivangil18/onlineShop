@@ -31,3 +31,14 @@ exports.postLogout = (req, res, next) => {
     res.redirect('/');
   });
 };
+
+exports.getRegister = (req, res, next) => {
+  res.render('auth/register', {
+    path: '/register',
+    pageTitle: 'Register',
+    isAuthenticated: req.session.isLoggedIn
+  });
+};
+exports.postRegister = (req, res, next) => {
+  alert('this does not work yet')
+};
