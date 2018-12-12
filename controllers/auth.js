@@ -39,6 +39,23 @@ exports.getRegister = (req, res, next) => {
     isAuthenticated: req.session.isLoggedIn
   });
 };
+
 exports.postRegister = (req, res, next) => {
-  alert('this does not work yet')
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  User.findOne({ email: email })
+    .then(userDoc => {
+      if (userDoc) {
+        return res.redirect('/register')
+      }
+      const user = new User({email, password, items: []});
+      return user.save();
+    })
+    .then(result => {
+      console.log('user registered!');
+      res.redirect('/login')
+    })
+    .catch(err => console.log(err));
 };
