@@ -7,23 +7,36 @@ exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false
+    isAuthenticated: false,
+    errorMessage: req.flash('loginError')
   });
 };
 
 exports.postLogin = (req, res, next) => {
-  User.findById('5c106ba4c190ed27d0b0fe1d')
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User.findOne({ email: email })
     .then(user => {
-      req.session.user = user;
-      req.session.isLoggedIn = true;
-      req.session.save(err => {
-        console.log(err);
-        res.redirect('/');
+      if (!user) {
+        req.flash('loginError', 'Email or Password no valid');
+        return res.redirect('/login');
+      }
+      bcryptjs.compare(password, user.password).then(doMatch => {
+        if (!doMatch) {
+          req.flash('loginError', 'Email or Password no valid');
+          return res.redirect('/login');
+        } else {
+          req.session.isLoggedIn = true;
+          req.session.user = user;
+          return req.session.save(err => {
+            console.log(err);
+            res.redirect('/');
+          });
+        }
       });
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 };
 
 exports.postLogout = (req, res, next) => {
@@ -37,7 +50,7 @@ exports.getRegister = (req, res, next) => {
   res.render('auth/register', {
     path: '/register',
     pageTitle: 'Register',
-    isAuthenticated: req.session.isLoggedIn
+    errorMessage: req.flash('registerError')
   });
 };
 
@@ -49,6 +62,7 @@ exports.postRegister = (req, res, next) => {
   User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
+        req.flash('registerError', 'Email already used!');
         return res.redirect('/register');
       }
       bcryptjs

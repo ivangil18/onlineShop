@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 const csfr = require('csurf');
+const flash = require('connect-flash');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -39,6 +40,8 @@ app.use(
     store: store
   })
 );
+
+app.use(flash());
 
 app.use(csfrProtection);
 
