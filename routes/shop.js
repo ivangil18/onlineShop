@@ -5,7 +5,6 @@ const router = express.Router();
 const shopController = require('../controllers/shop');
 const isAuth = require('../middlewares/is-auth');
 
-
 router.get('/', shopController.getLanding);
 
 router.get('/index', shopController.getIndex);
@@ -20,7 +19,7 @@ router.post('/cart', isAuth, shopController.postCart);
 
 router.get('/add-order', isAuth, shopController.getAddOrder);
 
-router.get('/orders, isAuth', shopController.getOrders);
+router.get('/orders', isAuth, shopController.getOrders);
 
 router.get('/products-list', shopController.productsData);
 
