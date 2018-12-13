@@ -84,8 +84,7 @@ exports.getIndex = (req, res, next) => {
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
-        path: '/index',
-        isAuthenticated: req.session.isLoggedIn
+        path: '/index'
       });
     })
     .catch(err => console.log(err));

@@ -9,6 +9,7 @@
      <hr>
      <h3>$<%= item.productId.price%> (each)</h3>
      <form action="/cart-remove" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken%>">
      <input type="hidden" name="productId" value="<%= item.productId._id%>">
      <button type="submit" class="btn">Remove</button>
      </form>
