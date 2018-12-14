@@ -205,11 +205,32 @@ li {
   color: white;
 }
 
+.user-message {
+  margin: auto;
+  margin-bottom: 1rem;
+  width: 90%;
+  border: 1px solid rgb(142, 142, 224);
+  padding: 1rem;
+  border-radius: 3px;
+  background-color: #57789e;
+  text-align: center;
+}
+
+.user-message--error {
+  border-color: red;
+  background-color: #f0aba6;
+  color: red;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
   }
   #side-menu-toggle {
     display: none;
+  }
+
+  .user-message {
+    width: 30rem;
   }
 }
