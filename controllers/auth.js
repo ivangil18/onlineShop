@@ -2,6 +2,18 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user');
 
+const nodemailer = require('nodemailer');
+const sendGridTransport = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(
+  sendGridTransport({
+    auth: {
+      api_key:
+        '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'
+    }
+  })
+);
+
 exports.getLogin = (req, res, next) => {
   console.log(req.session);
   res.render('auth/login', {
@@ -46,15 +58,15 @@ exports.postLogout = (req, res, next) => {
   });
 };
 
-exports.getRegister = (req, res, next) => {
-  res.render('auth/register', {
-    path: '/register',
-    pageTitle: 'Register',
+exports.getSignin = (req, res, next) => {
+  res.render('auth/signin', {
+    path: '/signin',
+    pageTitle: 'Sign In',
     errorMessage: req.flash('registerError')
   });
 };
 
-exports.postRegister = (req, res, next) => {
+exports.postSignin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -63,7 +75,7 @@ exports.postRegister = (req, res, next) => {
     .then(userDoc => {
       if (userDoc) {
         req.flash('registerError', 'Email already used!');
-        return res.redirect('/register');
+        return res.redirect('/signin');
       }
       bcryptjs
         .hash(password, 12)
@@ -78,7 +90,22 @@ exports.postRegister = (req, res, next) => {
         .then(result => {
           console.log('user registered!');
           res.redirect('/login');
+          transporter.sendMail({
+            to: email,
+            from: 'no-reply@myonlineshop.com',
+            subject: 'Signin Confirmation',
+            html: '<h1>SUCCESS!</h1>'
+
+          })
         });
     })
     .catch(err => console.log(err));
+};
+
+exports.getResetPassword = (req, res, next) => {
+  res.render('auth/reset-password', {
+    path: '/reset-password',
+    pageTitle: 'Reset Password',
+    errorMessage: req.flash('loginError')
+  });
 };
