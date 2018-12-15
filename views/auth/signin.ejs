@@ -10,7 +10,7 @@
             <%= errorMessage%>
         </div>
       <% } %>
-      <form action="/register" method="POST" class="product-form">
+      <form action="/signin" method="POST" class="product-form">
         <div class="form-control">
           <label for="email">Email:</label>
           <input type="email" name="email" id="email" />
@@ -24,7 +24,7 @@
           <input type="password" name="confirmPassword" id="confirmPassword" />
         </div>
         <input type="hidden" name="_csrf" value="<%= csrfToken%>">
-        <button class="btn" type="submit">Register</button>
+        <button class="btn" type="submit">Sign In</button>
         </form>
     </main>
  <%- include('../includes/end.ejs') %>
