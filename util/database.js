@@ -6,7 +6,7 @@ let _db;
 
 const mongoConnect = callback => {
   MongoClient.connect(
-    'mongodb+srv://igil:UJXhzOMotdIUTtHX@cluster0-l40tt.mongodb.net/shop?retryWrites=true',
+    'enter yours here',
     { useNewUrlParser: true }
   )
     .then(client => {
