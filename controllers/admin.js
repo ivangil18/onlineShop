@@ -21,7 +21,7 @@ exports.postAddProduct = (req, res, next) => {
     price,
     description,
     imageURL,
-    userId    
+    userId
   });
   product
     .save()
@@ -38,7 +38,8 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const prodId = req.params.productId;
-  Product.findById(prodId)
+
+    Product.findById(prodId)
     .then(product => {
       res.render('admin/edit-product', {
         product: product,
@@ -76,13 +77,14 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find({userId: req.user._id})
     .then(products => {
       res.render('admin/products', {
         prods: products,
         pageTitle: 'Admin Products',
         path: '/products',
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        errorMessage: req.flash('error')
       });
     })
     .catch(err => console.log(err));
