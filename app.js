@@ -18,7 +18,7 @@ const User = require('./models/user');
 const app = express();
 
 const MONGODB_URI =
-  'mongodb+srv://igil:UJXhzOMotdIUTtHX@cluster0-l40tt.mongodb.net/shop?retryWrites=true';
+  'enter yours here';
 
 const store = new MongoDbStore({
   uri: MONGODB_URI,
