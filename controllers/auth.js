@@ -3,13 +3,14 @@ const nodemailer = require('nodemailer');
 const sendGridTransport = require('nodemailer-sendgrid-transport');
 const crypto = require('crypto');
 
+const { validationResult } = require('express-validator/check');
+
 const User = require('../models/user');
 
 const transporter = nodemailer.createTransport(
   sendGridTransport({
     auth: {
       api_key: 'enter yours'
-
     }
   })
 );
@@ -62,7 +63,7 @@ exports.getSignin = (req, res, next) => {
   res.render('auth/signin', {
     path: '/signin',
     pageTitle: 'Sign In',
-    errorMessage: req.flash('registerError')
+    errorMessage: req.flash('error')
   });
 };
 
@@ -70,11 +71,21 @@ exports.postSignin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('auth/signin', {
+      path: '/signin',
+      pageTitle: 'Sign In',
+      errorMessage: errors.array()[0].msg
+    });
+  }
 
   User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
-        req.flash('registerError', 'Email already used!');
+        req.flash('error', 'Email already used!');
         return res.redirect('/signin');
       }
       bcryptjs
@@ -158,7 +169,6 @@ exports.getResetPassword = (req, res, next) => {
         errorMessage: req.flash('reset-error'),
         userId: user._id.toString(),
         userToken: token
-        
       });
     })
     .catch(err => console.log(err));
@@ -174,8 +184,12 @@ exports.postResetPassword = (req, res, next) => {
     req.flash('error-resetPassword', 'Passwords do not match!');
     return res.redirect('/reset-password');
   }
-  
-  User.findOne({ _id: userId, userToken: userToken, tokenExpirationDate: {$gt: Date.now()}  })
+
+  User.findOne({
+    _id: userId,
+    userToken: userToken,
+    tokenExpirationDate: { $gt: Date.now() }
+  })
     .then(user => {
       if (!user) {
         req.flash('error-resetPassword', 'User not found');
