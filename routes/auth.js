@@ -1,5 +1,7 @@
 const express = require('express');
 
+const User = require('../models/user');
+
 const { check, body } = require('express-validator/check');
 
 const authController = require('../controllers/auth');
@@ -19,13 +21,28 @@ router.post(
   [
     check('email')
       .isEmail()
-      .withMessage('Please, enter a valid email'),
+      .withMessage('Please, enter a valid email')
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then(userDoc => {
+          if (userDoc) {
+            return Promise.reject(
+              'There is already an account with that email'
+            );
+          }
+        });
+      }),
     body(
       'password',
       'Please, enter a password with only letters and numbers and with at least 8 caracteres'
     )
       .isLength({ min: 5 })
-      .isAlphanumeric()
+      .isAlphanumeric(),
+    body('confirmPassword').custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Password do not match!');
+      }
+      return true;
+    })
   ],
   authController.postSignin
 );

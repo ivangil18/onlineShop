@@ -81,32 +81,25 @@ exports.postSignin = (req, res, next) => {
     });
   }
 
-  User.findOne({ email: email })
-    .then(userDoc => {
-      if (userDoc) {
-        req.flash('error', 'Email already used!');
-        return res.redirect('/signin');
-      }
-      bcryptjs
-        .hash(password, 12)
-        .then(hashPassword => {
-          const user = new User({
-            email: email,
-            password: hashPassword,
-            cart: { items: [] }
-          });
-          return user.save();
-        })
-        .then(result => {
-          console.log('user registered!');
-          res.redirect('/login');
-          transporter.sendMail({
-            to: email,
-            from: 'no-reply@myonlineshop.com',
-            subject: 'Signin Confirmation',
-            html: '<h1>SUCCESS!</h1>'
-          });
-        });
+  bcryptjs
+    .hash(password, 12)
+    .then(hashPassword => {
+      const user = new User({
+        email: email,
+        password: hashPassword,
+        cart: { items: [] }
+      });
+      return user.save();
+    })
+    .then(result => {
+      console.log('user registered!');
+      res.redirect('/login');
+      transporter.sendMail({
+        to: email,
+        from: 'no-reply@myonlineshop.com',
+        subject: 'Signin Confirmation',
+        html: '<h1>SUCCESS!</h1>'
+      });
     })
     .catch(err => console.log(err));
 };
