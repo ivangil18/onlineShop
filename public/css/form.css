@@ -43,3 +43,7 @@
   button:hover {
     background-color: rgb(56, 116, 207);
   }
+
+  .form-control input.invalid {
+    border-color: red;
+  }

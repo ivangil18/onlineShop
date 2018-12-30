@@ -32,7 +32,7 @@ exports.postLogin = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.render('auth/login', {
+    return res.status(422).render('auth/login', {
       path: '/login',
       pageTitle: 'Login',
       isAuthenticated: false,
@@ -74,7 +74,9 @@ exports.getSignin = (req, res, next) => {
   res.render('auth/signin', {
     path: '/signin',
     pageTitle: 'Sign In',
-    errorMessage: req.flash('error')
+    errorMessage: req.flash('error'),
+    oldInputs: { email: '', password: '', confirmPassword: '' },
+    validationErrors: []
   });
 };
 
@@ -88,7 +90,13 @@ exports.postSignin = (req, res, next) => {
     return res.status(422).render('auth/signin', {
       path: '/signin',
       pageTitle: 'Sign In',
-      errorMessage: errors.array()[0].msg
+      errorMessage: errors.array()[0].msg,
+      oldInputs: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword 
+      },
+      validationErrors: errors.array()
     });
   }
 
