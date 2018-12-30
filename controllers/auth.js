@@ -21,7 +21,9 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     isAuthenticated: false,
-    errorMessage: req.flash('loginError')
+    errorMessage: req.flash('loginError'),
+    validationErrors: false,
+    oldInputs: { email: '', password: '' }
   });
 };
 
@@ -36,7 +38,9 @@ exports.postLogin = (req, res, next) => {
       path: '/login',
       pageTitle: 'Login',
       isAuthenticated: false,
-      errorMessage: errors.array()[0].msg
+      errorMessage: errors.array()[0].msg,
+      validationErrors: true,
+      oldInputs: { email: email, password: password }
     });
   }
 
@@ -94,7 +98,7 @@ exports.postSignin = (req, res, next) => {
       oldInputs: {
         email: email,
         password: password,
-        confirmPassword: req.body.confirmPassword 
+        confirmPassword: req.body.confirmPassword
       },
       validationErrors: errors.array()
     });

@@ -17,6 +17,7 @@ router.post(
     check('password', 'email or password no valid!')
       .isLength({ min: 8 })
       .isAlphanumeric()
+      .normalizeEmail()
   ],
   authController.postLogin
 );
@@ -39,19 +40,23 @@ router.post(
             );
           }
         });
-      }),
+      })
+      .normalizeEmail(),
     body(
       'password',
       'Please, enter a password with only letters and numbers and with at least 8 caracteres'
     )
       .isLength({ min: 5 })
-      .isAlphanumeric(),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Password do not match!');
-      }
-      return true;
-    })
+      .isAlphanumeric()
+      .trim(),
+    body('confirmPassword')
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Password do not match!');
+        }
+        return true;
+      })
+      .trim()
   ],
   authController.postSignin
 );
