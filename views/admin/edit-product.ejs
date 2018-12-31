@@ -5,22 +5,39 @@
   <%- include('../includes/navigation.ejs') %>
 
     <main>
+        <% if (errorMessage.length > 0) {%>
+          <div class="user-message user-message--error">
+              <%= errorMessage%>
+          </div>
+        <% } %>
       <form action="/admin/<% if(editMode) {%>edit-product<%}else{%>add-product<%}%>" method="POST" class="product-form">
         <div class="form-control">
           <label for="title">Product:</label>
-          <input type="text" name="title" id="title" value="<% if(editMode) {%><%= product.title%> <%}%>" />
+          <input type="text" 
+            name="title" 
+            id="title" 
+            value="<% if(editMode || hasError) {%><%= product.title%> <%}%>"
+            class="<%= validationResult.find(e => e.param === 'title') ? 'invalid' : ''%>" />
         </div>
         <div class="form-control">
           <label for="imageURL">Image URL:</label>
-          <input type="text" name="imageURL" id="imageURL" value="<% if(editMode) {%><%= product.imageURL%> <%}%>" />
+          <input type="text" 
+            name="imageURL" 
+            id="imageURL" 
+            value="<% if(editMode || hasError) {%><%= product.imageURL%> <%}%>" 
+            class="<%= validationResult.find(e=> e.param === 'imageURL') ? 'invalid' : ''%>"/>
         </div>
         <div class="form-control">
           <label for="price">Price:</label>
-          <input type="text" name="price" id="price" value="<% if(editMode) {%><%= product.price%> <%}%>" />
+          <input type="text" 
+            name="price" 
+            id="price" 
+            value="<%if(editMode || hasError){%><%=product.price%><%}%>%>" 
+            class="<%= validationResult.find(e=> e.param === 'price') ? 'invalid' : ''%>"/>
         </div>
         <div class="form-control">
-          <label for="description">Product:</label>
-          <textarea name="description" id="description" rows="5"><% if(editMode) { %><%= product.description%><%}%></textarea>
+          <label for="description">Description:</label>
+          <textarea name="description" id="description" rows="5" class="<%= validationResult.find(e=> e.param === 'description') ? 'invalid' : ''%>"><% if(editMode || hasError) {%><%= product.description%> <%}%></textarea>
         </div>
         <%if(editMode) {%>
           <input type="hidden" name="productId" value="<%= product._id %>">

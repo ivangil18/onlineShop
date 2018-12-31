@@ -17,7 +17,6 @@ router.post(
     check('password', 'email or password no valid!')
       .isLength({ min: 8 })
       .isAlphanumeric()
-      .normalizeEmail()
   ],
   authController.postLogin
 );

@@ -44,6 +44,6 @@
     background-color: rgb(56, 116, 207);
   }
 
-  .form-control input.invalid {
+  .form-control input.invalid, textarea.invalid{
     border-color: red;
   }
