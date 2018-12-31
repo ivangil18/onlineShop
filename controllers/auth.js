@@ -21,13 +21,28 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     isAuthenticated: false,
-    errorMessage: req.flash('loginError')
+    errorMessage: req.flash('loginError'),
+    validationErrors: false,
+    oldInputs: { email: '', password: '' }
   });
 };
 
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render('auth/login', {
+      path: '/login',
+      pageTitle: 'Login',
+      isAuthenticated: false,
+      errorMessage: errors.array()[0].msg,
+      validationErrors: true,
+      oldInputs: { email: email, password: password }
+    });
+  }
 
   User.findOne({ email: email })
     .then(user => {
@@ -63,14 +78,15 @@ exports.getSignin = (req, res, next) => {
   res.render('auth/signin', {
     path: '/signin',
     pageTitle: 'Sign In',
-    errorMessage: req.flash('error')
+    errorMessage: req.flash('error'),
+    oldInputs: { email: '', password: '', confirmPassword: '' },
+    validationErrors: []
   });
 };
 
 exports.postSignin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -78,36 +94,35 @@ exports.postSignin = (req, res, next) => {
     return res.status(422).render('auth/signin', {
       path: '/signin',
       pageTitle: 'Sign In',
-      errorMessage: errors.array()[0].msg
+      errorMessage: errors.array()[0].msg,
+      oldInputs: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword
+      },
+      validationErrors: errors.array()
     });
   }
 
-  User.findOne({ email: email })
-    .then(userDoc => {
-      if (userDoc) {
-        req.flash('error', 'Email already used!');
-        return res.redirect('/signin');
-      }
-      bcryptjs
-        .hash(password, 12)
-        .then(hashPassword => {
-          const user = new User({
-            email: email,
-            password: hashPassword,
-            cart: { items: [] }
-          });
-          return user.save();
-        })
-        .then(result => {
-          console.log('user registered!');
-          res.redirect('/login');
-          transporter.sendMail({
-            to: email,
-            from: 'no-reply@myonlineshop.com',
-            subject: 'Signin Confirmation',
-            html: '<h1>SUCCESS!</h1>'
-          });
-        });
+  bcryptjs
+    .hash(password, 12)
+    .then(hashPassword => {
+      const user = new User({
+        email: email,
+        password: hashPassword,
+        cart: { items: [] }
+      });
+      return user.save();
+    })
+    .then(result => {
+      console.log('user registered!');
+      res.redirect('/login');
+      transporter.sendMail({
+        to: email,
+        from: 'no-reply@myonlineshop.com',
+        subject: 'Signin Confirmation',
+        html: '<h1>SUCCESS!</h1>'
+      });
     })
     .catch(err => console.log(err));
 };

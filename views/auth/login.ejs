@@ -13,11 +13,21 @@
       <form action="/login" method="POST" class="product-form">
         <div class="form-control">
           <label for="email">Email:</label>
-          <input type="email" name="email" id="email" />
+          <input 
+            type="email" 
+            name="email" 
+            id="email"
+            value="<%= oldInputs.email %>"
+            class="<%= validationErrors ? 'invalid' : '' %>" />
         </div>
         <div class="form-control">
           <label for="password">Password:</label>
-          <input type="password" name="password" id="password" />
+          <input 
+            type="password" 
+            name="password" 
+            id="password" 
+            value="<%= oldInputs.password %>"
+            class="<%= validationErrors ? 'invalid' : '' %>" />
         </div>
         <input type="hidden" name="_csrf" value="<%= csrfToken%>">
         <button class="btn" type="submit">Login</button>
