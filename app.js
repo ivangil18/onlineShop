@@ -17,8 +17,8 @@ const User = require('./models/user');
 
 const app = express();
 
-const MONGODB_URI ='mongodb+srv://igil:d5xqpHR4uvTFqTzg@cluster0-l40tt.mongodb.net/test?retryWrites=true';
- 
+const MONGODB_URI =
+  'mongodb+srv://igil:d5xqpHR4uvTFqTzg@cluster0-l40tt.mongodb.net/test?retryWrites=true';
 
 const store = new MongoDbStore({
   uri: MONGODB_URI,
@@ -27,7 +27,6 @@ const store = new MongoDbStore({
 const csfrProtection = csfr();
 
 app.set('view engine', 'ejs');
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -51,10 +50,15 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id)
     .then(user => {
+      if (!user) {
+        return next();
+      }
       req.user = user;
       next();
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      throw new Error(err);
+    });
 });
 
 app.use((req, res, next) => {
