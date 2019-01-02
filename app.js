@@ -71,7 +71,12 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.get('/500', errors.error500);
 app.use(errors.error404);
+
+app.use((error, req, res, next) => {
+  res.redirect('/500');
+});
 
 mongoose
   .connect(
