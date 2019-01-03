@@ -10,7 +10,7 @@
               <%= errorMessage%>
           </div>
         <% } %>
-      <form action="/admin/<% if(editMode) {%>edit-product<%}else{%>add-product<%}%>" method="POST" class="product-form">
+      <form action="/admin/<% if(editMode) {%>edit-product<%}else{%>add-product<%}%>" method="POST" class="product-form" enctype="multipart/form-data">
         <div class="form-control">
           <label for="title">Product:</label>
           <input type="text" 

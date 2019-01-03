@@ -23,11 +23,10 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
- // const _id = new mongoose.Types.ObjectId('5c298afc3c080c314829b241');
-  const title = req.body.title;
+   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
-  const imageURL = req.body.imageURL;
+  const imageURL = req.file;
   const userId = req.user;
 
   const errors = validationResult(req);
