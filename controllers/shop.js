@@ -177,17 +177,24 @@ exports.getInvoice = (req, res, next) => {
       if (order.user.userId.toString() !== req.user._id.toString()) {
         return next(new Error('Unauthorized'));
       }
-      fs.readFile(invoicePath, (err, data) => {
-        if (err) {
-          return next(err);
-        }
-        res.setHeader('Content-type', 'application/pdf');
-        res.setHeader(
-          'Content-disposition',
-          'attachment; filename="' + invoiceName + '"'
-        );
-        res.send(data);
-      });
+      //   fs.readFile(invoicePath, (err, data) => {
+      //     if (err) {
+      //       return next(err);
+      //     }
+      //     res.setHeader('Content-type', 'application/pdf');
+      //     res.setHeader(
+      //       'Content-disposition',
+      //       'attachment; filename="' + invoiceName + '"'
+      //     );
+      //     res.send(data);
+      //   });
+      const file = fs.createReadStream(invoicePath);
+      res.setHeader('Content-type', 'application/pdf');
+      res.setHeader(
+        'Content-disposition',
+        'inline; filename="' + invoiceName + '"'
+      );
+      file.pipe(res);
     })
     .catch(err => next(err));
 };
