@@ -18,10 +18,6 @@ router.post(
       .isLength({ min: 3 })
       .trim()
       .withMessage('Please, enter a valid title'),
-    check('imageURL')
-      .isURL()
-      .trim()
-      .withMessage('Please, enter a valid URL'),
     check('price')
       .isFloat()
       .trim()
@@ -46,10 +42,6 @@ router.post(
       .isLength({ min: 3 })
       .trim()
       .withMessage('Please, enter a valid title'),
-    check('imageURL')
-      .isURL()
-      .trim()
-      .withMessage('Please, enter a valid URL'),
     check('price')
       .isFloat()
       .trim()
