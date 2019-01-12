@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const PDFdocument = require('pdfkit');
 
+const ITEMS_PER_PAGE = 2;
+
 exports.productsData = (req, res, next) => {
   Product.find()
     .then(products => {
@@ -103,7 +105,10 @@ exports.getCheckout = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+  const page = req.query.page;
   Product.find()
+    .skip((page - 1) * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE)
     .then(products => {
       res.render('shop/index', {
         prods: products,
@@ -200,7 +205,7 @@ exports.getInvoice = (req, res, next) => {
       order.products.forEach(prod => {
         pdfDoc.text('     ');
         pdfDoc.fontSize(12).text(prod.product.title);
-        pdfDoc.text('Price: $' + prod.product.price)
+        pdfDoc.text('Price: $' + prod.product.price);
         pdfDoc.text('Amount: ' + prod.quantity);
         const totalPrice = prod.quantity * prod.product.price;
         totalAmount += totalPrice;
@@ -209,7 +214,9 @@ exports.getInvoice = (req, res, next) => {
           '......................................................................'
         );
       });
-      pdfDoc.text('_________________________________________________________________');
+      pdfDoc.text(
+        '_________________________________________________________________'
+      );
       pdfDoc.fontSize(8).text('  ');
       pdfDoc.fontSize(16).text('Total Amount: $' + totalAmount);
 
