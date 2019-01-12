@@ -240,7 +240,8 @@ li {
 }
 
 .pagination a:hover,
-.pagination a:active {
+.pagination a:active,
+.pagination a.active {
   background-color: #003169;
   color: white;
 }
