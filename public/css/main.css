@@ -227,6 +227,24 @@ li {
   text-align: center
 }
 
+.pagination {
+  text-align: center;
+  margin-top: 2rem
+}
+
+.pagination a {
+  padding: .5rem;
+  border: 1px solid #003169;
+  border-radius: 15%;
+  margin: 0 .5rem
+}
+
+.pagination a:hover,
+.pagination a:active {
+  background-color: #003169;
+  color: white;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
@@ -234,7 +252,6 @@ li {
   #side-menu-toggle {
     display: none;
   }
-
   .user-message {
     width: 30rem;
   }
