@@ -185,8 +185,8 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-exports.getDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId;
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.params.productId;
   Product.findById(prodId)
     .then(product => {
       if (!product) {
@@ -197,11 +197,9 @@ exports.getDeleteProduct = (req, res, next) => {
     })
     .then(result => {
       console.log('Product Deleted');
-      res.redirect('/admin/products');
+      res.json('Success, product deleted')
     })
     .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      res.json('Some errors occurred during execution')
     });
 };
