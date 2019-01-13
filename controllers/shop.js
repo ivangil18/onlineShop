@@ -5,16 +5,31 @@ const fs = require('fs');
 const path = require('path');
 const PDFdocument = require('pdfkit');
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 2;
 
 exports.productsData = (req, res, next) => {
+  const page = +req.query.page || 1 ;
+  let totalItems;
+
   Product.find()
+    .countDocuments()
+    .then(countProd => {
+      totalItems = countProd;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then(products => {
       res.render('shop/products-list', {
         prods: products,
         pageTitle: 'Shop',
         path: '/products-list',
-        isAuthenticated: req.session.isLoggedIn
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
       });
     })
     .catch(err => {
