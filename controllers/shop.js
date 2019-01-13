@@ -62,6 +62,38 @@ exports.getLanding = (req, res, next) => {
   res.redirect('/index');
 };
 
+exports.getIndex = (req, res, next) => {
+  const page = +req.query.page || 1 ;
+  let totalItems;
+
+  Product.find()
+    .countDocuments()
+    .then(countProd => {
+      totalItems = countProd;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
+    .then(products => {
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/index',
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
+      });
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
 exports.getCart = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
@@ -116,39 +148,28 @@ exports.postRemoveProductFromCart = (req, res, next) => {
 };
 
 exports.getCheckout = (req, res, next) => {
-  res.render('shop/checkout', { pageTitle: 'Checkout', path: '/checkout' });
-};
-
-exports.getIndex = (req, res, next) => {
-  const page = +req.query.page || 1 ;
-  let totalItems;
-
-  Product.find()
-    .countDocuments()
-    .then(countProd => {
-      totalItems = countProd;
-      return Product.find()
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE);
+  req.user
+  .populate('cart.items.productId')
+  .execPopulate()
+  .then(userCart => {
+    let total = 0;
+    const products = userCart.cart.items;
+    products.forEach(p => {
+      total += p.quantity * p.productId.price;
     })
-    .then(products => {
-      res.render('shop/index', {
-        prods: products,
-        pageTitle: 'Shop',
-        path: '/index',
-        currentPage: page,
-        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-        hasPreviousPage: page > 1,
-        nextPage: page + 1,
-        previousPage: page - 1,
-        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
-      });
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+    res.render('shop/checkout', {
+      pageTitle: 'Checkout',
+      path: '/checkout',
+      cart: products,
+      isAuthenticated: req.session.isLoggedIn,
+      totalAmount: total
     });
+  })
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  });
 };
 
 exports.getAddOrder = (req, res, next) => {

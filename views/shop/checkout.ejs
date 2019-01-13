@@ -5,16 +5,9 @@
     <main>
            <% for(let item of cart) {%>
             <h1><%= item.productId.title%> (<%= item.quantity%>)</h1>
-            <hr>
             <h3>$<%= item.productId.price%> (each)</h3>
-            <form action="/cart-remove" method="POST">
-               <input type="hidden" name="_csrf" value="<%= csrfToken%>">
-            <input type="hidden" name="productId" value="<%= item.productId._id%>">
-            <button type="submit" class="btn">Remove</button>
-            </form>
-         <%}%>
-         <hr>
-         <br>
-         <a href="/add-order" class="btn">Place Order!</a>
+            <hr>
+           <%}%>
+      <h2>Total: <%= totalAmount%></h2>
    </main>
 <%- include('../includes/end.ejs')%>

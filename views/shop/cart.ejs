@@ -10,13 +10,13 @@
      <h3>$<%= item.productId.price%> (each)</h3>
      <form action="/cart-remove" method="POST">
         <input type="hidden" name="_csrf" value="<%= csrfToken%>">
-     <input type="hidden" name="productId" value="<%= item.productId._id%>">
-     <button type="submit" class="btn">Remove</button>
+        <input type="hidden" name="productId" value="<%= item.productId._id%>">
+        <button type="submit" class="btn">Remove</button>
      </form>
   <%}%>
   <hr>
   <br>
-  <a href="/add-order" class="btn">Order Now!</a>
+  <a href="/checkout" class="btn">Order Now!</a>
 <%}else{%>
     <h1>Cart Empty</h1>
 <%}%>
