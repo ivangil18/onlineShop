@@ -5,14 +5,31 @@ const fs = require('fs');
 const path = require('path');
 const PDFdocument = require('pdfkit');
 
+const ITEMS_PER_PAGE = 2;
+
 exports.productsData = (req, res, next) => {
+  const page = +req.query.page || 1 ;
+  let totalItems;
+
   Product.find()
+    .countDocuments()
+    .then(countProd => {
+      totalItems = countProd;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then(products => {
       res.render('shop/products-list', {
         prods: products,
         pageTitle: 'Shop',
         path: '/products-list',
-        isAuthenticated: req.session.isLoggedIn
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
       });
     })
     .catch(err => {
@@ -103,12 +120,28 @@ exports.getCheckout = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+  const page = +req.query.page || 1 ;
+  let totalItems;
+
   Product.find()
+    .countDocuments()
+    .then(countProd => {
+      totalItems = countProd;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then(products => {
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
-        path: '/index'
+        path: '/index',
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
       });
     })
     .catch(err => {
@@ -200,7 +233,7 @@ exports.getInvoice = (req, res, next) => {
       order.products.forEach(prod => {
         pdfDoc.text('     ');
         pdfDoc.fontSize(12).text(prod.product.title);
-        pdfDoc.text('Price: $' + prod.product.price)
+        pdfDoc.text('Price: $' + prod.product.price);
         pdfDoc.text('Amount: ' + prod.quantity);
         const totalPrice = prod.quantity * prod.product.price;
         totalAmount += totalPrice;
@@ -209,7 +242,9 @@ exports.getInvoice = (req, res, next) => {
           '......................................................................'
         );
       });
-      pdfDoc.text('_________________________________________________________________');
+      pdfDoc.text(
+        '_________________________________________________________________'
+      );
       pdfDoc.fontSize(8).text('  ');
       pdfDoc.fontSize(16).text('Total Amount: $' + totalAmount);
 
