@@ -98,7 +98,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-//app.get('/500', errors.error500);
+//app.get('/400', errors.error404);
 app.use(errors.error404);
 
 app.use((error, req, res, next) => {
