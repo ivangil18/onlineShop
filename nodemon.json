@@ -1,0 +1,7 @@
+{
+  "env": {
+    "MONGO_USER": "igil",
+    "MONGO_PASSWORD": "8mktvyjzS7SKf7PD",
+    "MONGO_DEFAULT_DATABASE": "shop"
+  }
+}

@@ -7,6 +7,7 @@ const MongoDbStore = require('connect-mongodb-session')(session);
 const csfr = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+const helmet = require('helmet');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -18,8 +19,14 @@ const User = require('./models/user');
 
 const app = express();
 
-const MONGODB_URI =
-  'mongodb+srv://igil:8mktvyjzS7SKf7PD@cluster0-l40tt.mongodb.net/store?retryWrites=true';
+app.use(helmet());
+
+const MONGODB_URI = `
+mongodb+srv://${process.env.MONGO_USER}:${
+  process.env.MONGO_PASSWORD
+}@cluster0-l40tt.mongodb.net/${
+  process.env.MONGO_DEFAULT_DATABASE
+}?retryWrites=true`;
 
 const store = new MongoDbStore({
   uri: MONGODB_URI,
@@ -111,12 +118,9 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(
-    MONGODB_URI,
-    { useNewUrlParser: true }
-  )
+  .connect(MONGODB_URI, { useNewUrlParser: true })
   .then(result => {
     console.log('connected!');
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch(err => console.log(err));
